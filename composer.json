@@ -1,5 +1,40 @@
 {
 	"name" : "zendcart/zendcart",
-	"description" : "cart in zf2",
-	"keywords" : []
+	"description" : "Cart in ZF2",
+	"type" : "zf2-module",
+	"authors" : [{
+			"name" : "Vincenzo Provenza",
+			"email" : "info@ilovecode.it",
+			"homepage" : "http://ilovecode.it/",
+			"role" : "Developer"
+		}
+	],
+	"keywords" : [
+		"email zf2",
+		"module zf2",
+		"send email"
+	],
+	"homepage" : "https://github.com/vikey89/EmailZF2",
+	"require" : {
+		"php" : ">=5.3.3",
+		"zendframework/zendframework" : "2.*"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"Zendcart" : "src"
+		},
+		"classmap" : [
+			"./Module.php"
+		]
+	},
+	"minimum-stability" : "beta",
+	"support" : {
+		"email" : "info@ilovecode.it"
+	},
+	"repositories" : [{
+			"name" : "ZendCart",
+			"type" : "git",
+			"url" : "https://github.com/vikey89/ZendCart.git"
+		}
+	]
 }
