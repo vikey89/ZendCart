@@ -40,7 +40,14 @@ class Module implements AutoloaderProviderInterface
             'factories' => array(
                 'ZendCart' => function ($sm)
                 {
-                    $cart = new ZendCart();
+                    $serviceLocator = $sm->getServiceLocator();
+                    $config = $serviceLocator->get('Configuration');
+                    if (!isset($config['zendcart'])) {
+                        throw new \Exception('Configurazione ZendCart non impostata.');
+                    }
+                    $cart = new ZendCart(array(
+                        'iva' => $config['zendcart']['iva']
+                    ));
                     return $cart;
                 }
             )
