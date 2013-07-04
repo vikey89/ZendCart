@@ -1,59 +1,126 @@
 <?php
-
-/**
- * 1) insert:
- * verifica array sulla singola kiave
- * aggiunta alla sessione
- * recupero il valore per getTotal()
- * 
- * 2) update:
- * verifica array sulla singola kiave
- * aggiorna la sessione
- * se la qty  == 0 elimina il prodotto dalla sessione
- * recupero il valore per getTotal()
- * 
- * 3) getCart:
- *  
- */
-
-
-
 namespace Zendcart\Controller\Plugin;
 
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\Session\Container;
 
+/**
+ * ZendCart
+ * Simple Shopping Cart
+ *
+ * @package ZF2 Modules
+ * @category Plugin
+ * @copyright 2013
+ * @version 1.0 Beta
+ *         
+ */
 class ZendCart extends AbstractPlugin
 {
-    private $_cart;
+
+    private $_session;
+
     private $_config;
-    // array('id' => '', 'qty' => '', 'min_qty' => null, 'max_qty' => null, 'price' => '', 'name' => '', 'options' => array('')),
-    
-    public function __construct($config = array()){
+
+    /**
+     * Appendo l'array del carrello
+     *
+     * @param array $products
+     * @return item products
+     */
+    private function append_item($products = array())
+    {
+        return array(
+            'id' => $products['id'],
+            'qty' => $products['qty'],
+            'price' => $products['price'],
+            'name' => $products['name'],
+            'token' => rand(),
+            'date' => date('Y-m-d H:i:s', time())
+        );
+    }
+
+    /**
+     * __construct
+     *
+     * @param array $config
+     */
+    public function __construct($config = array())
+    {
         $this->_config = $config;
-        $this->_cart = new Container('cart');
+        $this->_session = new Container('zfPproducts');
     }
-    
-    public function insert($prodotti){
-        echo $this->_config['iva'];
-        $this->_cart->offsetSet('data', $prodotti);
-        $email = $this->_cart->offsetGet('data');
-        print_r($email);
+
+    /**
+     * Aggiungo un prodotto al carrello
+     *
+     * @example $this->ZendCart()->insert($request->getPost());
+     * @example $this->ZendCart()->insert(array(id => '', 'qty' => '', 'price' => ''));
+     * @param array $products
+     */
+    public function insert($products = array())
+    {
+        // print_r($products);
+        if (is_array($this->_session['products'])) {
+            $max = count($this->_session['products']);
+            $this->_session['products'][$max] = $this->append_item($products);
+        } else {
+            $this->_session['products'] = array();
+            $this->_session['products'][0] = $this->append_item($products);
+        }
     }
-    
-    public function update(){
-    
+
+    /**
+     * Aggiorno la quantitˆ di un prodotto
+     *
+     * @example $this->ZendCart()->update(array('token' => '', 'qty' => ''));
+     * @param array $products
+     */
+    public function update($products = array())
+    {
+        $token = (int) $products['token'];
+        $max = count($this->_session['products']);
+        for ($i = 0; $i < $max; $i ++) {
+            if ($token == $this->_session['products'][$i]['token']) {
+                $this->_session['products'][$i]['qty'] = $products['qty'];
+                break;
+            }
+        }
     }
-    
-    public function destroy(){
-    $this->_cart->offsetUnset('cart');
+
+    /**
+     * Elimino il prodotto dal carrello
+     *
+     * @example $this->ZendCart()->remove(array('token' => ''));
+     * @param array $products
+     */
+    public function remove($products = array())
+    {
+        $token = (int) $products['token'];
+        $max = count($this->_session['products']);
+        for ($i = 0; $i < $max; $i ++) {
+            if ($token == $this->_session['products'][$i]['token']) {
+                unset($this->_session['products'][$i]);
+                break;
+            }
+        }
+        $this->_session['products'] = array_values($this->_session['products']);
     }
-    
-    public function getCart(){
-    
+
+    /**
+     * Elimino tutti i prodotti dal carrello
+     */
+    public function destroy()
+    {
+        $this->_session->offsetUnset('products');
     }
-    
-    public function getTotal(){
-    
+
+    public function getCart()
+    {
+        $products = $this->_session->offsetGet('products');
+        print_r($products);
+        return $products;
     }
+
+    public function getTotal()
+    {}
 }
