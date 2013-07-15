@@ -12,7 +12,7 @@ use Zend\Session\Container;
  * @category Plugin
  * @copyright 2013
  * @version 1.0 Beta
- *         
+ *
  */
 class ZendCart extends AbstractPlugin
 {
@@ -39,6 +39,29 @@ class ZendCart extends AbstractPlugin
         );
     }
 
+    private function checkCart($products)
+    {
+    	if (!is_array($products) OR count($products) == 0)
+    	{
+    		throw new \Exception('Il metodo Insert vuole un array.');
+    		return FALSE;
+    	}
+
+    	if (!isset($products['id']) OR !isset($products['qty']) OR !isset($products['price']) OR !isset($products['name']))
+    	{
+    		throw new \Exception('L\' array deve contenere id, qty, price, name in maniera permanente.');
+    		return FALSE;
+    	}
+
+    	if (!is_numeric($products['qty']) OR $products['qty'] == 0)
+    	{
+    		throw new \Exception('La qty deve essere un numero interno e differtente da zero.');
+    		return FALSE;
+    	}
+
+    	return TRUE;
+    }
+
     /**
      * __construct
      *
@@ -59,14 +82,16 @@ class ZendCart extends AbstractPlugin
      */
     public function insert($products = array())
     {
-        // print_r($products);
-        if (is_array($this->_session['products'])) {
-            $max = count($this->_session['products']);
-            $this->_session['products'][$max] = $this->append_item($products);
-        } else {
-            $this->_session['products'] = array();
-            $this->_session['products'][0] = $this->append_item($products);
-        }
+		if($this->checkCart($products))
+		{
+			if (is_array($this->_session['products'])) {
+				$max = count($this->_session['products']);
+				$this->_session['products'][$max] = $this->append_item($products);
+			} else {
+				$this->_session['products'] = array();
+				$this->_session['products'][0] = $this->append_item($products);
+			}
+		}
     }
 
     /**
@@ -116,11 +141,27 @@ class ZendCart extends AbstractPlugin
 
     public function getCart()
     {
-        $products = $this->_session->offsetGet('products');
-        print_r($products);
-        return $products;
+        return $products = $this->_session->offsetGet('products');
+    }
+
+    public function getItems()
+    {
+		return count($products = $this->_session->offsetGet('products'));
     }
 
     public function getTotal()
-    {}
+    {
+    	$price = 0;
+    	foreach($this->getCart() as $key)
+    	{
+    		$price =+ $price + ($key['price'] * $key['qty']);
+    	}
+
+    	$config = $this->getController()->getServiceLocator()->get('Config');
+    	$zendcart = $config['zendcart']['iva'];
+    	$result['total'] = number_format($price, 2);
+    	$result['vat'] = number_format(($price/100) * $zendcart, 2);
+    	$result['total_with_vat'] = number_format($price + $result['vat'], 2);
+    	return $result;
+    }
 }
