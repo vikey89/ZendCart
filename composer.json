@@ -7,21 +7,29 @@
 			"email" : "info@ilovecode.it",
 			"homepage" : "http://ilovecode.it/",
 			"role" : "Developer"
+		},
+		{
+			"name" : "Concetto Vecchio",
+			"email" : "info@cvsolutions.it",
+			"homepage" : "http://cvsolutions.it/",
+			"role" : "Developer"
 		}
 	],
 	"keywords" : [
-		"email zf2",
-		"module zf2",
-		"send email"
+		"zend cart",
+		"cart",
+		"e-commerce",
+		"zf2 module",
+		"carrello zf2"
 	],
-	"homepage" : "https://github.com/vikey89/EmailZF2",
+	"homepage" : "https://github.com/vikey89/ZendCart",
 	"require" : {
 		"php" : ">=5.3.3",
 		"zendframework/zendframework" : "2.*"
 	},
 	"autoload" : {
 		"psr-0" : {
-			"Zendcart" : "src"
+			"ZendCart" : "src"
 		},
 		"classmap" : [
 			"./Module.php"
@@ -29,7 +37,8 @@
 	},
 	"minimum-stability" : "beta",
 	"support" : {
-		"email" : "info@ilovecode.it"
+		"email" : "info@ilovecode.it",
+		"email" : "info@cvsolutions.it"
 	},
 	"repositories" : [{
 			"name" : "ZendCart",

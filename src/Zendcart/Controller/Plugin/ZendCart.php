@@ -285,13 +285,13 @@ class ZendCart extends AbstractPlugin
             foreach ($this->_session->offsetGet('products') as $key => $value)
             {
                 $items[$key] = array(
-                    'id' 		=> $value['id'],
-                    'qty' 		=> $value['qty'],
-                    'price' 	=> $value['price'],
-                    'name' 		=> $value['name'],
-                    'sub_total' => $this->_formatNumber($value['price'] * $value['qty']),
-                	'options' 	=> $value['options'],
-                    'date' 		=> $value['date']
+                    'id' 		=> 	$value['id'],
+                    'qty' 		=> 	$value['qty'],
+                    'price' 	=> 	$value['price'],
+                    'name' 		=> 	$value['name'],
+                    'sub_total'	=> 	$this->_formatNumber($value['price'] * $value['qty']),
+                	'options' 	=> 	$value['options'],
+                    'date' 		=> 	$value['date']
                 );
             }
             return $items;
