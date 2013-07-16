@@ -55,7 +55,7 @@ Update
 ------------
 ```php
 $product = array(
-    'rowid' => '4b848870240fd2e976ee59831b34314f7cfbb05b',
+    'token' => '4b848870240fd2e976ee59831b34314f7cfbb05b',
     'qty'   => 2
 );
 $this->ZendCart()->update($product);
@@ -64,7 +64,10 @@ $this->ZendCart()->update($product);
 Remove
 ------------
 ```php
-$this->ZendCart()->remove('4b848870240fd2e976ee59831b34314f7cfbb05b');
+$product = array(
+    'token' => '4b848870240fd2e976ee59831b34314f7cfbb05b',
+);
+$this->ZendCart()->remove($product);
 ```
 
 Destroy
