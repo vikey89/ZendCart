@@ -31,7 +31,7 @@ Configuration:
 <?php
 return array(
     'zendcart' => array(
-        'vat'  => 22
+        'vat'  => 21
     ),
 );
 ```
