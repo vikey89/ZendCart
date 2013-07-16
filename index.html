@@ -1,0 +1,264 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>ZendCart by vikey89</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>ZendCart</h1>
+        <p>Fantastic Cart in ZF2 for your e-commerce.</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/vikey89/ZendCart" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/vikey89/ZendCart/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/vikey89/ZendCart/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>
+<a name="zendcart" class="anchor" href="#zendcart"><span class="octicon octicon-link"></span></a>ZendCart</h1>
+
+<p>Version 1.0</p>
+
+<p>This model allows you to manage a shopping cart for e-commerce in an easy, simple and fast.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>For the installation uses composer <a href="http://getcomposer.org" title="composer - package manager">composer</a>.</p>
+
+<div class="highlight"><pre>php composer.phar require  zendcart/zendcart:dev-master
+</pre></div>
+
+<p>Add this project in your composer.json:</p>
+
+<pre><code>"require": {
+    "zendcart/zendcart": "dev-master"
+}
+</code></pre>
+
+<h2>
+<a name="post-installation" class="anchor" href="#post-installation"><span class="octicon octicon-link"></span></a>Post Installation</h2>
+
+<p>Configuration:</p>
+
+<ul>
+<li>Add the module of <code>config/application.config.php</code> under the array <code>modules</code>, insert <code>ZendCart</code>
+</li>
+<li>Create a file named <code>zendcart.global.php</code> under <code>config/autoload/</code>. </li>
+<li>Add the following lines to the file you just created:</li>
+</ul><div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">return</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'zendcart'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+        <span class="s1">'vat'</span>  <span class="o">=&gt;</span> <span class="mi">21</span>
+    <span class="p">),</span>
+<span class="p">);</span>
+</pre></div>
+
+<h1>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h1>
+
+<h2>
+<a name="insert" class="anchor" href="#insert"><span class="octicon octicon-link"></span></a>Insert</h2>
+
+<div class="highlight"><pre><span class="nv">$product</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'id'</span>      <span class="o">=&gt;</span> <span class="s1">'cod_123abc'</span><span class="p">,</span>
+    <span class="s1">'qty'</span>     <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">'price'</span>   <span class="o">=&gt;</span> <span class="mf">39.95</span><span class="p">,</span>
+    <span class="s1">'name'</span>    <span class="o">=&gt;</span> <span class="s1">'T-Shirt'</span><span class="p">,</span>
+    <span class="s1">'options'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">'Size'</span> <span class="o">=&gt;</span> <span class="s1">'M'</span><span class="p">,</span> <span class="s1">'Color'</span> <span class="o">=&gt;</span> <span class="s1">'Black'</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">insert</span><span class="p">(</span><span class="nv">$product</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="update" class="anchor" href="#update"><span class="octicon octicon-link"></span></a>Update</h2>
+
+<div class="highlight"><pre><span class="nv">$product</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'rowid'</span> <span class="o">=&gt;</span> <span class="s1">'4b848870240fd2e976ee59831b34314f7cfbb05b'</span><span class="p">,</span>
+    <span class="s1">'qty'</span>   <span class="o">=&gt;</span> <span class="mi">2</span>
+<span class="p">);</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">update</span><span class="p">(</span><span class="nv">$product</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="remove" class="anchor" href="#remove"><span class="octicon octicon-link"></span></a>Remove</h2>
+
+<div class="highlight"><pre><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">remove</span><span class="p">(</span><span class="s1">'4b848870240fd2e976ee59831b34314f7cfbb05b'</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="destroy" class="anchor" href="#destroy"><span class="octicon octicon-link"></span></a>Destroy</h2>
+
+<div class="highlight"><pre><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">destroy</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="cart" class="anchor" href="#cart"><span class="octicon octicon-link"></span></a>Cart</h2>
+
+<div class="highlight"><pre><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">cart</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="total" class="anchor" href="#total"><span class="octicon octicon-link"></span></a>Total</h2>
+
+<div class="highlight"><pre><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">total</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="total-items" class="anchor" href="#total-items"><span class="octicon octicon-link"></span></a>Total Items</h2>
+
+<div class="highlight"><pre><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">total_items</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="items-options" class="anchor" href="#items-options"><span class="octicon octicon-link"></span></a>Items Options</h2>
+
+<div class="highlight"><pre><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">item_options</span><span class="p">(</span><span class="s1">'4b848870240fd2e976ee59831b34314f7cfbb05b'</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="example-in-view" class="anchor" href="#example-in-view"><span class="octicon octicon-link"></span></a>Example in view</h2>
+
+<p>Controller</p>
+
+<div class="highlight"><pre><span class="k">return</span> <span class="k">new</span> <span class="nx">ViewModel</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+    <span class="s1">'items'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">cart</span><span class="p">(),</span>
+    <span class="s1">'total_items'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">total_items</span><span class="p">(),</span>
+    <span class="s1">'total'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">total</span><span class="p">(),</span>
+<span class="p">));</span>
+</pre></div>
+
+<p>View</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?php if($total_items &gt; 0): ?&gt;</span>
+<span class="nt">&lt;h3&gt;</span>Products in cart (<span class="cp">&lt;?php echo $total_items; ?&gt;</span>):<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">"width: 900px;"</span> <span class="na">border=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;tr&gt;</span>
+  <span class="nt">&lt;th&gt;</span>Qty<span class="nt">&lt;/th&gt;</span>
+  <span class="nt">&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;</span>
+  <span class="nt">&lt;th&gt;</span>Item Price<span class="nt">&lt;/th&gt;</span>
+  <span class="nt">&lt;th&gt;</span>Sub-Total<span class="nt">&lt;/th&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+<span class="cp">&lt;?php foreach($items as $key):?&gt;</span>
+<span class="nt">&lt;tr&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;</span><span class="cp">&lt;?php echo $key['qty']; ?&gt;</span><span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;</span>
+    <span class="cp">&lt;?php echo $key['name']; ?&gt;</span>
+        <span class="cp">&lt;?php if($key['options'] != 0):?&gt;</span>
+            Options:
+            <span class="cp">&lt;?php foreach($key['options'] as $options =&gt; $value):?&gt;</span>
+                <span class="cp">&lt;?php echo $options.' '.$value;?&gt;</span>
+            <span class="cp">&lt;?php endforeach;?&gt;</span>
+        <span class="cp">&lt;?php endif;?&gt;</span>
+    <span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;</span><span class="cp">&lt;?php echo $key['price']; ?&gt;</span><span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;</span><span class="cp">&lt;?php echo $key['sub_total']; ?&gt;</span><span class="nt">&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+<span class="cp">&lt;?php endforeach;?&gt;</span>
+<span class="nt">&lt;tr&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"2"</span><span class="nt">&gt;&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;&lt;strong&gt;</span>Sub Total<span class="nt">&lt;/strong&gt;&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;</span> <span class="cp">&lt;?php echo $total['sub-total'];?&gt;</span><span class="nt">&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"2"</span><span class="nt">&gt;&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;&lt;strong&gt;</span>Vat<span class="nt">&lt;/strong&gt;&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;</span> <span class="cp">&lt;?php echo $total['vat'];?&gt;</span><span class="nt">&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">"2"</span><span class="nt">&gt;&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;&lt;strong&gt;</span>Total<span class="nt">&lt;/strong&gt;&lt;/td&gt;</span>
+  <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center;"</span><span class="nt">&gt;</span> <span class="cp">&lt;?php echo $total['total'];?&gt;</span><span class="nt">&lt;/td&gt;</span>
+<span class="nt">&lt;/tr&gt;</span>
+
+<span class="cp">&lt;?php else: ?&gt;</span>
+<span class="nt">&lt;h4&gt;</span>The Shopping Cart Empty<span class="nt">&lt;/h4&gt;</span>
+<span class="cp">&lt;?php endif;?&gt;</span>
+</pre></div>
+
+<h2>
+<a name="function-reference" class="anchor" href="#function-reference"><span class="octicon octicon-link"></span></a>Function Reference</h2>
+
+<table>
+<tr>
+<td>Function</td>
+    <td>Description</td>
+</tr>
+<tr>
+<td>$this-&gt;ZendCart()-&gt;insert();</td>
+<td>Add a product to cart.</td>
+</tr>
+<tr>
+<td>$this-&gt;ZendCart()-&gt;update();</td>
+<td>Update the quantity of a product.</td>
+</tr>
+<tr>
+<td>$this-&gt;ZendCart()-&gt;remove();</td>
+<td>Delete the item from the cart.</td>
+</tr>
+<tr>
+<td>$this-&gt;ZendCart()-&gt;destroy();</td>
+<td>Delete all items from the cart.</td>
+</tr>
+<tr>
+<td>$this-&gt;ZendCart()-&gt;cart();</td>
+<td>Extracts all items from the cart.</td>
+</tr>
+<tr>
+<td>$this-&gt;ZendCart()-&gt;total();</td>
+<td>Counts the total number of items in cart</td>
+</tr>
+<tr>
+<td>$this-&gt;ZendCart()-&gt;total_items();</td>
+<td>Counts the total number of items in cart</td>
+</tr>
+<tr>
+<td>$this-&gt;ZendCart()-&gt;item_options();</td>
+<td>Returns the an array of options, for a particular product token.</td>
+</tr>
+<tr>
+<td>Config Vat</td>
+<td>Set your vat in zendcart.global.php</td>
+</tr>
+</table><h1>
+<a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>Contributors</h1>
+
+<ul>
+<li>Concetto Vecchio - <a href="mailto:info@cvsolutions.it">info@cvsolutions.it</a>
+</li>
+</ul>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/vikey89">vikey89</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
