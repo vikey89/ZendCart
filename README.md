@@ -70,7 +70,7 @@ $this->ZendCart()->remove('4b848870240fd2e976ee59831b34314f7cfbb05b');
 Destroy
 ------------
 ```php
-$this->ZendCart()->destroy($product);
+$this->ZendCart()->destroy();
 ```
 
 Cart
