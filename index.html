@@ -99,7 +99,7 @@
 <a name="update" class="anchor" href="#update"><span class="octicon octicon-link"></span></a>Update</h2>
 
 <div class="highlight"><pre><span class="nv">$product</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-    <span class="s1">'rowid'</span> <span class="o">=&gt;</span> <span class="s1">'4b848870240fd2e976ee59831b34314f7cfbb05b'</span><span class="p">,</span>
+    <span class="s1">'token'</span> <span class="o">=&gt;</span> <span class="s1">'4b848870240fd2e976ee59831b34314f7cfbb05b'</span><span class="p">,</span>
     <span class="s1">'qty'</span>   <span class="o">=&gt;</span> <span class="mi">2</span>
 <span class="p">);</span>
 <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">update</span><span class="p">(</span><span class="nv">$product</span><span class="p">);</span>
@@ -108,7 +108,10 @@
 <h2>
 <a name="remove" class="anchor" href="#remove"><span class="octicon octicon-link"></span></a>Remove</h2>
 
-<div class="highlight"><pre><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">remove</span><span class="p">(</span><span class="s1">'4b848870240fd2e976ee59831b34314f7cfbb05b'</span><span class="p">);</span>
+<div class="highlight"><pre><span class="nv">$product</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'token'</span> <span class="o">=&gt;</span> <span class="s1">'4b848870240fd2e976ee59831b34314f7cfbb05b'</span><span class="p">,</span>
+<span class="p">);</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">ZendCart</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">remove</span><span class="p">(</span><span class="nv">$product</span><span class="p">);</span>
 </pre></div>
 
 <h2>
