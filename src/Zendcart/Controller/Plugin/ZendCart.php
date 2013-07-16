@@ -336,7 +336,7 @@ class ZendCart extends AbstractPlugin
                 $price =+ ($price + ($key['price'] * $key['qty']));
             }
 
-            $params = $this->_config['iva'];
+            $params = $this->_config['vat'];
             $vat = $this->_formatNumber((($price / 100) * $params));
 
             return array(

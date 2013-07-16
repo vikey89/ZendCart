@@ -11,12 +11,12 @@ class ZendCartFactory implements FactoryInterface
     {
         $allServices = $servicelocator->getServiceLocator();
         $config = $allServices->get('ServiceManager')->get('Configuration');
-        
+
         if (! isset($config['zendcart'])) {
             throw new \Exception('Configurazione ZendCart non impostata.');
         }
         return new ZendCart(array(
-            'iva' => $config['zendcart']['iva']
+            'vat' => $config['zendcart']['vat']
         ));
     }
 }
