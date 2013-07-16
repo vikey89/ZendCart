@@ -50,11 +50,11 @@ class ZendCart extends AbstractPlugin
     private function _cart($items = array())
     {
     	return array(
-            'id' 		=> $items['id'],
+            'id'		=> $items['id'],
             'qty' 		=> $items['qty'],
             'price' 	=> $this->_formatNumber($items['price']),
             'name' 		=> $items['name'],
-        	'options' 	=> isset($items['options']) ? $items['options'] : 0,
+        	'options'	=> isset($items['options']) ? $items['options'] : 0,
             'date' 	  	=> date('Y-m-d H:i:s', time())
         );
     }
@@ -341,8 +341,8 @@ class ZendCart extends AbstractPlugin
 
             return array(
                 'sub-total' => $this->_formatNumber($price),
-                'vat' => $vat,
-                'total' => $this->_formatNumber($price + $vat)
+                'vat' 		=> $vat,
+                'total' 	=> $this->_formatNumber($price + $vat)
             );
         }
     }
