@@ -37,7 +37,7 @@ class ZendCart extends AbstractPlugin
     public function __construct($config = array())
     {
         $this->_config = $config;
-        $this->_session = new Container('zfPproducts');
+        $this->_session = new Container('zfProducts');
     }
 
     /**
@@ -72,7 +72,7 @@ class ZendCart extends AbstractPlugin
         $items = (array) $items;
         if (!is_array($items) or count($items) == 0)
         {
-            throw new \Exception('Il metodo vuole un array.');
+            throw new \Exception('The method takes an array.');
             return FALSE;
         }
     }
@@ -178,7 +178,7 @@ class ZendCart extends AbstractPlugin
      */
     private function _checkHasOption($token)
     {
-    	if (!isset($this->_session['products'][$token]['options']) OR count($this->_session['products'][$token]['options']) === 0)
+    	if (!isset($this->_session['products'][$token]['options']) OR count($this->_session['products'][$token]['options']) == 0)
 		{
 			return FALSE;
 		}
@@ -213,7 +213,7 @@ class ZendCart extends AbstractPlugin
      */
     public function insert($items = array())
     {
-        if ($this->_checkCartInsert($items))
+        if ($this->_checkCartInsert($items) === TRUE)
         {
         	$token = sha1($items['id'].$items['qty'].time());
 
@@ -237,7 +237,7 @@ class ZendCart extends AbstractPlugin
      */
     public function update($items = array())
     {
-        if ($this->_checkCartUpdate($items))
+        if ($this->_checkCartUpdate($items) === TRUE)
         {
 			$this->_session['products'][$items['token']]['qty'] = $items['qty'];
         }
@@ -253,7 +253,7 @@ class ZendCart extends AbstractPlugin
      */
     public function remove($items = array())
     {
-        if ($this->_checkCartRemove($items))
+        if ($this->_checkCartRemove($items) === TRUE)
         {
         	unset($this->_session['products'][$items['token']]);
         }
@@ -313,7 +313,7 @@ class ZendCart extends AbstractPlugin
         {
             foreach ($items as $key)
             {
-                $total_items = + ($total_items + $key['qty']);
+                $total_items =+ ($total_items + $key['qty']);
             }
             return $total_items;
         }
@@ -333,7 +333,7 @@ class ZendCart extends AbstractPlugin
             $price = 0;
             foreach ($this->cart() as $key)
             {
-                $price =+ $price + ($key['price'] * $key['qty']);
+                $price =+ ($price + ($key['price'] * $key['qty']));
             }
 
             $params = $this->_config['iva'];
@@ -357,7 +357,7 @@ class ZendCart extends AbstractPlugin
      */
     public function item_options($token)
     {
-    	if($this->_checkHasOption($token))
+    	if($this->_checkHasOption($token) === TRUE)
     	{
     		return $this->_session['products'][$token]['options'];
     	}
