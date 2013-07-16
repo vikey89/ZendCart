@@ -11,10 +11,14 @@ For the installation uses composer [composer](http://getcomposer.org "composer -
 ```sh
 php composer.phar require  zendcart/zendcart:dev-master
 ```
-If you have installed composer:
-```sh
-composer require  zendcart/zendcart:dev-master
-```
+
+Add this project in your composer.json:
+
+    ```json
+    "require": {
+        "zendcart/zendcart": "dev-master"
+    }
+    ```
 
 Post Installation
 ------------
