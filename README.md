@@ -169,6 +169,7 @@ Function Reference
     <tr><td>$this->ZendCart()->total();</td><td>Counts the total number of items in cart</td></tr>
     <tr><td>$this->ZendCart()->total_items();</td><td>Counts the total number of items in cart</td></tr>
     <tr><td>$this->ZendCart()->item_options();</td><td>Returns the an array of options, for a particular product token.</td></tr>
+    <tr><td>Config Vat</td><td>Set your vat in zendcart.global.php</td></tr>
 </table>
 
 Contributors
