@@ -7,8 +7,7 @@
 			"email" : "info@ilovecode.it",
 			"homepage" : "http://ilovecode.it/",
 			"role" : "Developer"
-		},
-		{
+		}, {
 			"name" : "Concetto Vecchio",
 			"email" : "info@cvsolutions.it",
 			"homepage" : "http://cvsolutions.it/",
@@ -23,6 +22,9 @@
 		"carrello zf2"
 	],
 	"homepage" : "https://github.com/vikey89/ZendCart",
+	"license" : [
+		"BSD-3-Clause"
+	],
 	"require" : {
 		"php" : ">=5.3.3",
 		"zendframework/zendframework" : "2.*"
@@ -37,7 +39,6 @@
 	},
 	"minimum-stability" : "beta",
 	"support" : {
-		"email" : "info@ilovecode.it",
 		"email" : "info@cvsolutions.it"
 	},
 	"repositories" : [{
