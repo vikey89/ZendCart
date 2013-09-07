@@ -1,3 +1,4 @@
+[![Total Downloads](https://poser.pugx.org/zendcart/zendcart/downloads.png)](https://packagist.org/packages/zendcart/zendcart)
 ZendCart
 ============================
 Version 1.0
