@@ -1,6 +1,6 @@
 <?php
 return array (
 	'zendcart' => array (
-		'iva' => '21'
+		'vat' => '21'
 	)
 );
