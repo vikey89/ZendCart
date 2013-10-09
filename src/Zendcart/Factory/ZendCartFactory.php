@@ -16,6 +16,12 @@ class ZendCartFactory implements FactoryInterface
         {
             throw new \Exception('Configuration ZendCart not set.');
         }
+
+        if (!isset($config['zendcart']['vat']))
+        {
+            throw new \Exception('No vat index defined.');
+        }
+
         return new ZendCart(array(
             'vat' => $config['zendcart']['vat']
         ));
