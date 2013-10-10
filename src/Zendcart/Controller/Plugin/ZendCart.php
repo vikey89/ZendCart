@@ -215,15 +215,38 @@ class ZendCart extends AbstractPlugin
     {
         if ($this->_checkCartInsert($items) === TRUE)
         {
-        	$token = sha1($items['id'].$items['qty'].time());
 
-            if (is_array($this->_session['products']))
-            {
-                $this->_session['products'][$token] = $this->_cart($items);
-            } else {
-                $this->_session['products'] = array();
-                $this->_session['products'][$token] = $this->_cart($items);
+            $isNew = true;
+            $shouldUpdate = $this->_config['on_insert_update_existing_item'];
+
+            //check if should update existing product
+            if($shouldUpdate){
+                $products = is_array($this->_session['products']) ? $this->_session['products'] : array();
+                foreach ($products as $token => $existing_item) {
+                    if($existing_item['id'] === $items['id']){
+                        //fount same product already on cart
+                        $isNew = false;
+                        $items = array('token'=>$token, 'qty'=> $existing_item['qty']+$items['qty']);
+                        break;
+                    }
+                }
             }
+
+            if($isNew){
+                $token = sha1($items['id'].$items['qty'].time());
+
+                if (is_array($this->_session['products']))
+                {
+                    $this->_session['products'][$token] = $this->_cart($items);
+                } else {
+                    $this->_session['products'] = array();
+                    $this->_session['products'][$token] = $this->_cart($items);
+                }
+            }else{
+                //update existing product
+                $this->update($items);
+            }
+
         }
     }
 

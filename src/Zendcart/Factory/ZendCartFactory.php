@@ -22,8 +22,12 @@ class ZendCartFactory implements FactoryInterface
             throw new \Exception('No vat index defined.');
         }
 
-        return new ZendCart(array(
-            'vat' => $config['zendcart']['vat']
-        ));
+        $default = array(
+            'on_insert_update_existing_item' => false
+        );
+
+        $options = array_merge($default, $config['zendcart']);
+
+        return new ZendCart($options);
     }
 }
