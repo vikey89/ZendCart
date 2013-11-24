@@ -55,7 +55,8 @@ class ZendCart extends AbstractPlugin
             'price' 	=> $this->_formatNumber($items['price']),
             'name' 		=> $items['name'],
         	'options'	=> isset($items['options']) ? $items['options'] : 0,
-            'date' 	  	=> date('Y-m-d H:i:s', time())
+            'date' 	  	=> date('Y-m-d H:i:s', time()),
+            'vat'       => isset($items['vat']) ? $items['vat'] : $this->_config['vat']
         );
     }
 
@@ -314,7 +315,8 @@ class ZendCart extends AbstractPlugin
                     'name' 		=> 	$value['name'],
                     'sub_total'	=> 	$this->_formatNumber($value['price'] * $value['qty']),
                 	'options' 	=> 	$value['options'],
-                    'date' 		=> 	$value['date']
+                    'date' 		=> 	$value['date'],
+                    'vat'       =>  $value['vat']
                 );
             }
             return $items;
@@ -354,17 +356,22 @@ class ZendCart extends AbstractPlugin
         if ($this->_isCartArray($this->cart()) === TRUE)
         {
             $price = 0;
+            $vat = 0;
             foreach ($this->cart() as $key)
             {
-                $price =+ ($price + ($key['price'] * $key['qty']));
+                $item_price = ($key['price'] * $key['qty']);
+                $item_vat   = (($item_price/100)*$key['vat']);
+                // $price =+ ($price + ($key['price'] * $key['qty']));
+                $price += $item_price;
+                $vat   += $item_vat;
             }
 
-            $params = $this->_config['vat'];
-            $vat = $this->_formatNumber((($price / 100) * $params));
+            // $params = $this->_config['vat'];
+            // $vat = $this->_formatNumber((($price / 100) * $params));
 
             return array(
                 'sub-total' => $this->_formatNumber($price),
-                'vat' 		=> $vat,
+                'vat' 		=> $this->_formatNumber($vat),
                 'total' 	=> $this->_formatNumber($price + $vat)
             );
         }
