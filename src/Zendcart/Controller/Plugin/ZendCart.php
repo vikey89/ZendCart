@@ -15,8 +15,12 @@ namespace ZendCart\Controller\Plugin;
 
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\Session\Container;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\EventManager;
+use Zendcart\Event\CartEvent;
 
-class ZendCart extends AbstractPlugin
+class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
 {
 
     /**
@@ -30,6 +34,11 @@ class ZendCart extends AbstractPlugin
     private $_config;
 
     /**
+     * @var $eventManager
+     */
+    protected $eventManager;
+
+    /**
      * __construct
      *
      * @param array $config
@@ -38,6 +47,7 @@ class ZendCart extends AbstractPlugin
     {
         $this->_config = $config;
         $this->_session = new Container('zfProducts');
+        $this->eventManager = new EventManager();
     }
 
     /**
@@ -243,6 +253,7 @@ class ZendCart extends AbstractPlugin
                     $this->_session['products'] = array();
                     $this->_session['products'][$token] = $this->_cart($items);
                 }
+                $this->getEventManager()->trigger(CartEvent::EVENT_CREATE_CART_POST, $this, array('cart_id'=>$token, 'cart' => $this->_session['products'][$token]));
             }else{
                 //update existing product
                 $this->update($items);
@@ -279,7 +290,9 @@ class ZendCart extends AbstractPlugin
     {
         if ($this->_checkCartRemove($items) === TRUE)
         {
+            $cart = $this->_session['products'][$items['token']]; 
         	unset($this->_session['products'][$items['token']]);
+            $this->getEventManager()->trigger(CartEvent::EVENT_DELETE_CART_POST, $this, array('cart_id'=>$token, 'cart' => $cart));
         }
     }
 
@@ -391,5 +404,24 @@ class ZendCart extends AbstractPlugin
     	{
     		return $this->_session['products'][$token]['options'];
     	}
+    }
+
+    public function getEventManager()
+    {
+        return $this->eventManager;
+    }
+
+    public function setEventManager(EventManagerInterface $eventManager)
+    {
+        $eventManager->setIdentifiers(
+            __CLASS__,
+            get_called_class(),
+            'zendcart'
+        );
+
+        $eventManager->setEventClass('ZendCart\Service\CartEvent');
+
+        $this->eventManager = $eventManager;
+        return $this;
     }
 }
