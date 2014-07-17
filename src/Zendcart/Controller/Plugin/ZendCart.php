@@ -252,7 +252,8 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
                 } else {
                     //creo il carrello in sessione
                     $this->_session['products'] = array();
-                    $this->getEventManager()->trigger(CartEvent::EVENT_CREATE_CART_POST, $this, array('cart_id'=>$this->_session->getManager()->getId()));
+                    $this->_session->cartId = $this->_session->getManager()->getId();
+                    $this->getEventManager()->trigger(CartEvent::EVENT_CREATE_CART_POST, $this, array('cart_id'=>$this->_session->cartId));
                     //aggiungo elemento
                     $this->_session['products'][$token] = $this->_cart($items);
                 }
@@ -310,7 +311,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
     public function destroy()
     {
         $this->_session->offsetUnset('products');
-        $this->getEventManager()->trigger(CartEvent::EVENT_DELETE_CART_POST, $this, ['cart_id'=>$this->_session->getManager()->getId()]);
+        $this->getEventManager()->trigger(CartEvent::EVENT_DELETE_CART_POST, $this, ['cart_id'=>$this->_session->cartId]);
     }
 
     /**
