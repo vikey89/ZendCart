@@ -47,7 +47,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
     {
         $this->_config = $config;
         $this->_session = new Container('zfProducts');
-        $this->eventManager = new EventManager();
+        $this->setEventManager(new EventManager());
     }
 
     /**
@@ -250,10 +250,14 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
                 {
                     $this->_session['products'][$token] = $this->_cart($items);
                 } else {
+                    //creo il carrello in sessione
                     $this->_session['products'] = array();
+                    $this->getEventManager()->trigger(CartEvent::EVENT_CREATE_CART_POST, $this, array('cart_id'=>$this->_session->getManager()->getId()));
+                    //aggiungo elemento
                     $this->_session['products'][$token] = $this->_cart($items);
                 }
-                $this->getEventManager()->trigger(CartEvent::EVENT_CREATE_CART_POST, $this, array('cart_id'=>$token, 'cart' => $this->_session['products'][$token]));
+                //evento per elemento aggiunto
+                $this->trigger(CartEvent::EVENT_ADD_ITEM_POST, $token, $this->_session['products'][$token], $this);
             }else{
                 //update existing product
                 $this->update($items);
@@ -275,6 +279,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
         if ($this->_checkCartUpdate($items) === TRUE)
         {
 			$this->_session['products'][$items['token']]['qty'] = $items['qty'];
+            $this->trigger(CartEvent::EVENT_UPDATE_QUANTITY_POST, $items['token'], $this->_session['products'][$items['token']], $this);
         }
     }
 
@@ -288,11 +293,11 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
      */
     public function remove($items = array())
     {
-        if ($this->_checkCartRemove($items) === TRUE)
+        if (($this->_checkCartRemove($items) === TRUE) && isset($this->_session['products'][$items['token']]) )
         {
             $cart = $this->_session['products'][$items['token']]; 
         	unset($this->_session['products'][$items['token']]);
-            $this->getEventManager()->trigger(CartEvent::EVENT_DELETE_CART_POST, $this, array('cart_id'=>$token, 'cart' => $cart));
+            $this->trigger(CartEvent::EVENT_REMOVE_ITEM_POST, $items['token'], $cart, $this);
         }
     }
 
@@ -305,6 +310,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
     public function destroy()
     {
         $this->_session->offsetUnset('products');
+        $this->getEventManager()->trigger(CartEvent::EVENT_DELETE_CART_POST, $this, ['cart_id'=>$this->_session->getManager()->getId()]);
     }
 
     /**
@@ -414,14 +420,29 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
     public function setEventManager(EventManagerInterface $eventManager)
     {
         $eventManager->setIdentifiers(
+            'ZendCart\Service\Cart',
             __CLASS__,
             get_called_class(),
             'zendcart'
         );
-
-        $eventManager->setEventClass('ZendCart\Service\CartEvent');
+        // $eventManager->setEventClass('ZendCart\Service\Cart');
 
         $this->eventManager = $eventManager;
         return $this;
+    }
+
+
+    private function trigger($name, $token, $cartItem, $target=null)
+    {
+        $cartId = $this->_session->getManager()->getId();
+        $event = new CartEvent();
+        $event->setCartId($cartId)
+            ->setItemToken($token)
+            ->setCartItem($cartItem);
+
+        if ($target)
+            $event->setTarget($target);
+
+        $this->getEventManager()->trigger($name, $event);
     }
 }
