@@ -15,8 +15,12 @@ namespace ZendCart\Controller\Plugin;
 
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\Session\Container;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\EventManager;
+use Zendcart\Event\CartEvent;
 
-class ZendCart extends AbstractPlugin
+class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
 {
 
     /**
@@ -30,6 +34,11 @@ class ZendCart extends AbstractPlugin
     private $_config;
 
     /**
+     * @var $eventManager
+     */
+    protected $eventManager;
+
+    /**
      * __construct
      *
      * @param array $config
@@ -38,6 +47,7 @@ class ZendCart extends AbstractPlugin
     {
         $this->_config = $config;
         $this->_session = new Container('zfProducts');
+        $this->setEventManager(new EventManager());
     }
 
     /**
@@ -55,7 +65,8 @@ class ZendCart extends AbstractPlugin
             'price' 	=> $this->_formatNumber($items['price']),
             'name' 		=> $items['name'],
         	'options'	=> isset($items['options']) ? $items['options'] : 0,
-            'date' 	  	=> date('Y-m-d H:i:s', time())
+            'date' 	  	=> date('Y-m-d H:i:s', time()),
+            'vat'       => isset($items['vat']) ? $items['vat'] : $this->_config['vat']
         );
     }
 
@@ -215,15 +226,44 @@ class ZendCart extends AbstractPlugin
     {
         if ($this->_checkCartInsert($items) === TRUE)
         {
-        	$token = sha1($items['id'].$items['qty'].time());
 
-            if (is_array($this->_session['products']))
-            {
-                $this->_session['products'][$token] = $this->_cart($items);
-            } else {
-                $this->_session['products'] = array();
-                $this->_session['products'][$token] = $this->_cart($items);
+            $isNew = true;
+            $shouldUpdate = $this->_config['on_insert_update_existing_item'];
+
+            //check if should update existing product
+            if($shouldUpdate){
+                $products = is_array($this->_session['products']) ? $this->_session['products'] : array();
+                foreach ($products as $token => $existing_item) {
+                    if($existing_item['id'] === $items['id']){
+                        //fount same product already on cart
+                        $isNew = false;
+                        $items = array('token'=>$token, 'qty'=> $existing_item['qty']+$items['qty']);
+                        break;
+                    }
+                }
             }
+
+            if($isNew){
+                $token = sha1($items['id'].$items['qty'].time());
+
+                if (is_array($this->_session['products']))
+                {
+                    $this->_session['products'][$token] = $this->_cart($items);
+                } else {
+                    //creo il carrello in sessione
+                    $this->_session['products'] = array();
+                    $this->_session->cartId = $this->_session->getManager()->getId();
+                    $this->getEventManager()->trigger(CartEvent::EVENT_CREATE_CART_POST, $this, array('cart_id'=>$this->_session->cartId));
+                    //aggiungo elemento
+                    $this->_session['products'][$token] = $this->_cart($items);
+                }
+                //evento per elemento aggiunto
+                $this->trigger(CartEvent::EVENT_ADD_ITEM_POST, $token, $this->_session['products'][$token], $this);
+            }else{
+                //update existing product
+                $this->update($items);
+            }
+
         }
     }
 
@@ -240,6 +280,7 @@ class ZendCart extends AbstractPlugin
         if ($this->_checkCartUpdate($items) === TRUE)
         {
 			$this->_session['products'][$items['token']]['qty'] = $items['qty'];
+            $this->trigger(CartEvent::EVENT_UPDATE_QUANTITY_POST, $items['token'], $this->_session['products'][$items['token']], $this);
         }
     }
 
@@ -253,9 +294,11 @@ class ZendCart extends AbstractPlugin
      */
     public function remove($items = array())
     {
-        if ($this->_checkCartRemove($items) === TRUE)
+        if (($this->_checkCartRemove($items) === TRUE) && isset($this->_session['products'][$items['token']]) )
         {
+            $cart = $this->_session['products'][$items['token']]; 
         	unset($this->_session['products'][$items['token']]);
+            $this->trigger(CartEvent::EVENT_REMOVE_ITEM_POST, $items['token'], $cart, $this);
         }
     }
 
@@ -268,6 +311,7 @@ class ZendCart extends AbstractPlugin
     public function destroy()
     {
         $this->_session->offsetUnset('products');
+        $this->getEventManager()->trigger(CartEvent::EVENT_DELETE_CART_POST, $this, ['cart_id'=>$this->_session->cartId]);
     }
 
     /**
@@ -291,7 +335,8 @@ class ZendCart extends AbstractPlugin
                     'name' 		=> 	$value['name'],
                     'sub_total'	=> 	$this->_formatNumber($value['price'] * $value['qty']),
                 	'options' 	=> 	$value['options'],
-                    'date' 		=> 	$value['date']
+                    'date' 		=> 	$value['date'],
+                    'vat'       =>  $value['vat']
                 );
             }
             return $items;
@@ -331,17 +376,22 @@ class ZendCart extends AbstractPlugin
         if ($this->_isCartArray($this->cart()) === TRUE)
         {
             $price = 0;
+            $vat = 0;
             foreach ($this->cart() as $key)
             {
-                $price =+ ($price + ($key['price'] * $key['qty']));
+                $item_price = ($key['price'] * $key['qty']);
+                $item_vat   = (($item_price/100)*$key['vat']);
+                // $price =+ ($price + ($key['price'] * $key['qty']));
+                $price += $item_price;
+                $vat   += $item_vat;
             }
 
-            $params = $this->_config['vat'];
-            $vat = $this->_formatNumber((($price / 100) * $params));
+            // $params = $this->_config['vat'];
+            // $vat = $this->_formatNumber((($price / 100) * $params));
 
             return array(
                 'sub-total' => $this->_formatNumber($price),
-                'vat' 		=> $vat,
+                'vat' 		=> $this->_formatNumber($vat),
                 'total' 	=> $this->_formatNumber($price + $vat)
             );
         }
@@ -361,5 +411,39 @@ class ZendCart extends AbstractPlugin
     	{
     		return $this->_session['products'][$token]['options'];
     	}
+    }
+
+    public function getEventManager()
+    {
+        return $this->eventManager;
+    }
+
+    public function setEventManager(EventManagerInterface $eventManager)
+    {
+        $eventManager->setIdentifiers(
+            'ZendCart\Service\Cart',
+            __CLASS__,
+            get_called_class(),
+            'zendcart'
+        );
+        // $eventManager->setEventClass('ZendCart\Service\Cart');
+
+        $this->eventManager = $eventManager;
+        return $this;
+    }
+
+
+    private function trigger($name, $token, $cartItem, $target=null)
+    {
+        $cartId = $this->_session->getManager()->getId();
+        $event = new CartEvent();
+        $event->setCartId($cartId)
+            ->setItemToken($token)
+            ->setCartItem($cartItem);
+
+        if ($target)
+            $event->setTarget($target);
+
+        $this->getEventManager()->trigger($name, $event);
     }
 }
