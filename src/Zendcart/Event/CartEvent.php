@@ -26,7 +26,7 @@ class CartEvent extends Event {
     const EVENT_DELETE_CART_POST     = 'removeCart.post';
     const EVENT_EMPTY_CART           = 'emptyCart';
     const EVENT_EMPTY_CART_POST      = 'emptyCart.post';
-    const EVENT_UPDATE_QUATITY       = 'updateQuantities';
+    const EVENT_UPDATE_QUANTITY      = 'updateQuantities';
     const EVENT_UPDATE_QUANTITY_POST = 'updateQuantities.post';
 
 
@@ -94,11 +94,11 @@ class CartEvent extends Event {
     {
         return $this->itemToken;
     }
-    
+
     /**
      * Sets the value of itemToken.
      *
-     * @param mixed $itemToken the item token 
+     * @param mixed $itemToken the item token
      *
      * @return self
      */

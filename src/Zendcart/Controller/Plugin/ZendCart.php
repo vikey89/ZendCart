@@ -296,8 +296,8 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
     {
         if (($this->_checkCartRemove($items) === TRUE) && isset($this->_session['products'][$items['token']]) )
         {
-            $cart = $this->_session['products'][$items['token']]; 
-        	unset($this->_session['products'][$items['token']]);
+            $cart = $this->_session['products'][$items['token']];
+            unset($this->_session['products'][$items['token']]);
             $this->trigger(CartEvent::EVENT_REMOVE_ITEM_POST, $items['token'], $cart, $this);
         }
     }
@@ -435,7 +435,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
 
     private function trigger($name, $token, $cartItem, $target=null)
     {
-        $cartId = $this->_session->getManager()->getId();
+        $cartId = $this->_session->cartId;
         $event = new CartEvent();
         $event->setCartId($cartId)
             ->setItemToken($token)
