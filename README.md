@@ -150,6 +150,11 @@ View - phtml
 </tr>
 <tr>
   <td colspan="2"></td>
+  <td style="text-align: center;"><strong>Shipping</strong></td>
+  <td style="text-align: center;"> <?php echo $total['shipping'];?></td>
+</tr>
+<tr>
+  <td colspan="2"></td>
   <td style="text-align: center;"><strong>Total</strong></td>
   <td style="text-align: center;"> <?php echo $total['total'];?></td>
 </tr>
@@ -197,6 +202,11 @@ View - twig
                 <td colspan="2"></td>
                 <td style="text-align: center;"><strong>Vat</strong></td>
                 <td style="text-align: center;"> {{total.vat}}</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td><strong>Shipping</strong></td>
+                <td> {{total.shipping}}</td>
             </tr>
             <tr>
                 <td colspan="2"></td>
