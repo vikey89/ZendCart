@@ -9,7 +9,7 @@
 namespace ZendCart;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zendcart\Controller\Plugin\ZendCart;
+use ZendCart\Controller\Plugin\ZendCart;
 
 class Module implements AutoloaderProviderInterface
 {

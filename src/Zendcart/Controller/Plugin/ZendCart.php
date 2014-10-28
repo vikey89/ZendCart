@@ -18,7 +18,7 @@ use Zend\Session\Container;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
-use Zendcart\Event\CartEvent;
+use ZendCart\Event\CartEvent;
 
 class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
 {
@@ -198,7 +198,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
 
     /**
      * Number_format for the price,
-     * total, sub-total, vat.
+     * total, sub_total, vat.
      *
      * @param array $items
 	 * @access	private
@@ -390,7 +390,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
             // $vat = $this->_formatNumber((($price / 100) * $params));
 
             return array(
-                'sub-total' => $this->_formatNumber($price),
+                'sub_total' => $this->_formatNumber($price),
                 'vat' 		=> $this->_formatNumber($vat),
                 'total' 	=> $this->_formatNumber($price + $vat)
             );
