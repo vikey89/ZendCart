@@ -62,7 +62,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
     	return array(
             'id'		=> $items['id'],
             'qty' 		=> $items['qty'],
-            'price' 	=> $this->_formatNumber($items['price']),
+            'price' 	=> $items['price'],
             'name' 		=> $items['name'],
         	'options'	=> isset($items['options']) ? $items['options'] : 0,
             'date' 	  	=> date('Y-m-d H:i:s', time()),
@@ -196,22 +196,6 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
 		return TRUE;
     }
 
-    /**
-     * Number_format for the price,
-     * total, sub_total, vat.
-     *
-     * @param array $items
-	 * @access	private
-	 * @return	integer
-     */
-    private function _formatNumber($number)
-    {
-        if ($number == '')
-        {
-        	return FALSE;
-        }
-        return number_format($number, 2, '.', ',');
-    }
 
     /**
      * Add a product to cart
@@ -333,7 +317,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
                     'qty' 		=> 	$value['qty'],
                     'price' 	=> 	$value['price'],
                     'name' 		=> 	$value['name'],
-                    'sub_total'	=> 	$this->_formatNumber($value['price'] * $value['qty']),
+                    'sub_total'	=> 	$value['price'] * $value['qty'],
                 	'options' 	=> 	$value['options'],
                     'date' 		=> 	$value['date'],
                     'vat'       =>  $value['vat']
@@ -386,13 +370,10 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
                 $vat   += $item_vat;
             }
 
-            // $params = $this->_config['vat'];
-            // $vat = $this->_formatNumber((($price / 100) * $params));
-
             return array(
-                'sub_total' => $this->_formatNumber($price),
-                'vat' 		=> $this->_formatNumber($vat),
-                'total' 	=> $this->_formatNumber($price + $vat)
+                'sub_total' => $price,
+                'vat' 		=> $vat,
+                'total' 	=> $price + $vat
             );
         }
     }
