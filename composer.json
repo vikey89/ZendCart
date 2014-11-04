@@ -1,8 +1,14 @@
 {
-	"name" : "zendcart/zendcart",
+	"name" : "fabiopaiva/zendcart",
 	"description" : "Cart in ZF2",
 	"type" : "zf2-module",
-	"authors" : [{
+	"authors" : [
+		{
+			"name" : "Fábio Paiva",
+			"email" : "paiva.fabiofelipe@gmail.com",
+			"homepage" : "http://sigweb.net.br"
+		},
+		{
 			"name" : "Vincenzo Provenza",
 			"email" : "info@ilovecode.it",
 			"homepage" : "http://ilovecode.it/",
@@ -21,7 +27,7 @@
 		"zf2 module",
 		"carrello zf2"
 	],
-	"homepage" : "https://github.com/vikey89/ZendCart",
+	"homepage" : "https://github.com/fabiopaiva/ZendCart",
 	"license" : [
 		"BSD-3-Clause"
 	],
@@ -39,12 +45,12 @@
 	},
 	"minimum-stability" : "beta",
 	"support" : {
-		"email" : "info@cvsolutions.it"
+		"email" : "paiva.fabiofelipe@gmail.com"
 	},
 	"repositories" : [{
 			"name" : "ZendCart",
 			"type" : "git",
-			"url" : "https://github.com/vikey89/ZendCart.git"
+			"url" : "https://github.com/fabiopaiva/ZendCart.git"
 		}
 	]
 }

@@ -1,4 +1,4 @@
-[![Total Downloads](https://poser.pugx.org/zendcart/zendcart/downloads.png)](https://packagist.org/packages/zendcart/zendcart)
+[![Total Downloads](https://poser.pugx.org/fabiopaiva/zendcart/downloads.png)](https://packagist.org/packages/fabiopaiva/zendcart)
 ZendCart
 ============================
 Version 1.0
@@ -10,14 +10,14 @@ Installation
 For the installation uses composer [composer](http://getcomposer.org "composer - package manager").
 
 ```sh
-php composer.phar require  zendcart/zendcart:dev-master
+php composer.phar require  fabiopaiva/zendcart:dev-master
 ```
 
 Add this project in your composer.json:
 
 
     "require": {
-        "zendcart/zendcart": "dev-master"
+        "fabiopaiva/zendcart": "dev-master"
     }
     
 
@@ -243,3 +243,4 @@ Contributors
 =====================================
 
 * Concetto Vecchio - info@cvsolutions.it
+* Fábio Paiva - paiva.fabiofelipe@gmail.com

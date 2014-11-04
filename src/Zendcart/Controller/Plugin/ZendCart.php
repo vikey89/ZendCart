@@ -270,7 +270,7 @@ class ZendCart extends AbstractPlugin implements EventManagerAwareInterface {
      */
     public function destroy() {
         $this->_session->offsetUnset('products');
-        $this->getEventManager()->trigger(CartEvent::EVENT_DELETE_CART_POST, $this, ['cart_id' => $this->_session->cartId]);
+        $this->getEventManager()->trigger(CartEvent::EVENT_DELETE_CART_POST, $this, array('cart_id' => $this->_session->cartId));
     }
 
     /**
