@@ -1,4 +1,4 @@
-[![Total Downloads](https://poser.pugx.org/zendcart/zendcart/downloads.png)](https://packagist.org/packages/zendcart/zendcart)
+[![Total Downloads](https://poser.pugx.org/zcommercebr/zendcart/downloads.png)](https://packagist.org/packages/zcommercebr/zendcart)
 ZendCart
 ============================
 Version 1.0
@@ -10,14 +10,14 @@ Installation
 For the installation uses composer [composer](http://getcomposer.org "composer - package manager").
 
 ```sh
-php composer.phar require  zendcart/zendcart:dev-master
+php composer.phar require  zcommercebr/zendcart:dev-master
 ```
 
 Add this project in your composer.json:
 
 
     "require": {
-        "zendcart/zendcart": "dev-master"
+        "zcommercebr/zendcart": "dev-master"
     }
     
 
@@ -111,7 +111,7 @@ return new ViewModel(array(
     'total' => $this->ZendCart()->total(),
 ));
 ```
-View
+View - phtml
 ```html
 <?php if($total_items > 0): ?>
 <h3>Products in cart (<?php echo $total_items; ?>):</h3>
@@ -141,7 +141,7 @@ View
 <tr>
   <td colspan="2"></td>
   <td style="text-align: center;"><strong>Sub Total</strong></td>
-  <td style="text-align: center;"> <?php echo $total['sub-total'];?></td>
+  <td style="text-align: center;"> <?php echo $total['sub_total'];?></td>
 </tr>
 <tr>
   <td colspan="2"></td>
@@ -150,13 +150,76 @@ View
 </tr>
 <tr>
   <td colspan="2"></td>
+  <td style="text-align: center;"><strong>Shipping</strong></td>
+  <td style="text-align: center;"> <?php echo $total['shipping'];?></td>
+</tr>
+<tr>
+  <td colspan="2"></td>
   <td style="text-align: center;"><strong>Total</strong></td>
   <td style="text-align: center;"> <?php echo $total['total'];?></td>
 </tr>
-
+</table>
 <?php else: ?>
 <h4>The Shopping Cart Empty</h4>
 <?php endif;?>
+```
+
+View - twig
+```html
+{% extends 'layout/layout.twig' %}
+{% block content %}
+    {% if(total_items > 0) %}
+        <h3>Products in cart ({{total_items}}):</h3>
+        <table style="width: 900px;" border="1">
+            <tr>
+                <th>Qty</th>
+                <th>Name</th>
+                <th>Item Price</th>
+                <th>Sub-Total</th>
+            </tr>
+            {% for key in  items %}
+                <tr>
+                    <td style="text-align: center;">{{key.qty}}</td>
+                    <td style="text-align: center;">
+                        {{key.name}}
+                        {% if key.options | length > 0 %}
+                            Options:
+                            {% for options, value in key.options %}
+                                {{options}} {{value}}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">{{key.price}}</td>
+                    <td style="text-align: center;"> {{key.sub_total}}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2"></td>
+                <td style="text-align: center;"><strong>Sub Total</strong></td>
+                <td style="text-align: center;"> {{total.sub_total}}</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td style="text-align: center;"><strong>Vat</strong></td>
+                <td style="text-align: center;"> {{total.vat}}</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td><strong>Shipping</strong></td>
+                <td> {{total.shipping}}</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td style="text-align: center;"><strong>Total</strong></td>
+                <td style="text-align: center;"> {{total.total}}</td>
+            </tr>
+        </table>
+
+    {% else %}
+
+        <h4>The Shopping Cart Empty</h4>
+    {% endif %}
+{% endblock content %}
 ```
 
 Function Reference
@@ -180,3 +243,4 @@ Contributors
 =====================================
 
 * Concetto Vecchio - info@cvsolutions.it
+* Fábio Paiva - paiva.fabiofelipe@gmail.com
