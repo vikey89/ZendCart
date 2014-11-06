@@ -1,12 +1,12 @@
 {
-	"name" : "fabiopaiva/zendcart",
+	"name" : "zcommercebr/zendcart",
 	"description" : "Cart in ZF2",
 	"type" : "zf2-module",
 	"authors" : [
 		{
 			"name" : "Fábio Paiva",
 			"email" : "paiva.fabiofelipe@gmail.com",
-			"homepage" : "http://sigweb.net.br"
+			"homepage" : "http://zcommercebr.com.br"
 		},
 		{
 			"name" : "Vincenzo Provenza",
@@ -27,7 +27,7 @@
 		"zf2 module",
 		"carrello zf2"
 	],
-	"homepage" : "https://github.com/fabiopaiva/ZendCart",
+	"homepage" : "https://github.com/ZCommerceBR/ZendCart",
 	"license" : [
 		"BSD-3-Clause"
 	],
@@ -50,7 +50,7 @@
 	"repositories" : [{
 			"name" : "ZendCart",
 			"type" : "git",
-			"url" : "https://github.com/fabiopaiva/ZendCart.git"
+			"url" : "https://github.com/ZCommerceBR/ZendCart.git"
 		}
 	]
 }
