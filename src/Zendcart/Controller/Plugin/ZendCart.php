@@ -18,7 +18,7 @@ use Zend\Session\Container;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
-use Zendcart\Event\CartEvent;
+use ZendCart\Event\CartEvent;
 
 class ZendCart extends AbstractPlugin implements EventManagerAwareInterface
 {
